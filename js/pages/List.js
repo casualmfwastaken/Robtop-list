@@ -138,7 +138,7 @@ export default {
     }),
     computed: {
         level() {
-            return this.list[this.selected][0];
+            const level = targetObject?.[0] ?? "Default Level";
         },
         video() {
             if (!this.level.showcase) {
