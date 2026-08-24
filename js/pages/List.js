@@ -132,22 +132,8 @@ export default {
         editors: [],
         loading: true,
         selected: 0,
-        errors: [],
-        roleIconMap,
-        store
-    }),
-    computed: {
-        level() {
-    const level = (typeof this !== 'undefined' && this.list && this.list[0]) ? this.list[0] : null;
+            const level = (typeof this !== 'undefined' && this.list && this.list[0]) ? this.list[0] : null;
 
-        video() {
-            if (!this.level.showcase) {
-                return embed(this.level.verification);
-            }
-
-            return embed(
-                this.toggledShowcase
-                    ? this.level.showcase
                     : this.level.verification
             );
         },
