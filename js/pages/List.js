@@ -136,14 +136,13 @@ export default {
         roleIconMap,
         store
     }),
-    computed: {
-        get level() {
-  return this.someArrayOrObject?.[0];
-}
+      computed: {
+        level() {
+            return this.someArrayOrObject?.[0] || null;
         },
         video() {
-            if (!this.level.showcase) {
-                return embed(this.level.verification);
+            if (!this.level || !this.level.showcase) {
+                return this.level ? embed(this.level.verification) : null;
             }
 
             return embed(
