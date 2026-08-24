@@ -1,1 +1,18 @@
-
+{
+    "id": 110310064,
+    "name": "Hexagonal Blizzard",
+    "author": "Vorrachiz",
+    "creators": ["Vorrachiz"],
+    "verifier": "Null",
+    "verification": "",
+    "percentToQualify": "73",
+    "password": "Free To Copy",
+    "records": [
+        {
+            "user": "Null",
+            "link": "",
+            "percent": 100,
+            "hz": 0
+        }
+    ]
+}
