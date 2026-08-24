@@ -137,8 +137,9 @@ export default {
         store
     }),
     computed: {
-        level() {
-            return this.list[this.selected][0];
+        get level() {
+  return this.someArrayOrObject?.[0];
+}
         },
         video() {
             if (!this.level.showcase) {
