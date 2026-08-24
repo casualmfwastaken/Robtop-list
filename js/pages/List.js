@@ -127,21 +127,20 @@ export default {
             </div>
         </main>
     `,
-    data: () => ({
+       data: () => ({
         list: [],
         editors: [],
         loading: true,
         selected: 0,
-           level() {
-  return (this.list && this.list[0]) ? this.list[0] : null;
-},
-
-                    : this.level.verification
-            );
+    }),
+    computed: {
+        level() {
+            return (this.list && this.list[0]) ? this.list[0] : null;
+        },
+        verificationEmbed() {
+            return (this.level && this.level.verification) ? embed(this.level.verification) : null;
         },
     },
-                return embed(this.level.verification);
-            }
 
             return embed(
                 this.toggledShowcase
