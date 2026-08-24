@@ -138,7 +138,17 @@ export default {
     }),
     computed: {
         level() {
-            const level = targetObject?.[0] ?? "Default Level";
+            const level = someDataProperty && someDataProperty[0] ? someDataProperty[0] : null;
+
+// Replace line 34 in content.js with:
+function fetchList() {
+  return fetch('/api/list')
+    .then(res => res.json())
+    .catch(err => {
+      console.error("Failed to load list.", err);
+      return []; 
+    });
+}
         },
         video() {
             if (!this.level.showcase) {
