@@ -136,9 +136,9 @@ export default {
         roleIconMap,
         store
     }),
-      computed: {
+        computed: {
         level() {
-            return this.someArrayOrObject?.[0] || null;
+            return this.list?. || null;
         },
         video() {
             if (!this.level || !this.level.showcase) {
