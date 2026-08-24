@@ -138,7 +138,7 @@ export default {
     }),
     computed: {
         level() {
-            const level = someDataProperty && someDataProperty[0] ? someDataProperty[0] : null;
+    const level = (typeof this !== 'undefined' && this.list && this.list[0]) ? this.list[0] : null;
 
 // Replace line 34 in content.js with:
 function fetchList() {
