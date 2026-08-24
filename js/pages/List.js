@@ -140,18 +140,18 @@ export default {
         level() {
     const level = (typeof this !== 'undefined' && this.list && this.list[0]) ? this.list[0] : null;
 
-// Replace line 34 in content.js with:
-function fetchList() {
-  return fetch('/api/list')
-    .then(res => res.json())
-    .catch(err => {
-      console.error("Failed to load list.", err);
-      return []; 
-    });
-}
-        },
         video() {
             if (!this.level.showcase) {
+                return embed(this.level.verification);
+            }
+
+            return embed(
+                this.toggledShowcase
+                    ? this.level.showcase
+                    : this.level.verification
+            );
+        },
+    },
                 return embed(this.level.verification);
             }
 
