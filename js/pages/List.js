@@ -137,9 +137,8 @@ export default {
         store
     }),
         computed: {
-            level() {
+        level() {
             return this.list?.[0] || null;
-        },
         },
         video() {
             if (!this.level || !this.level.showcase) {
@@ -151,8 +150,11 @@ export default {
                     ? this.level.showcase
                     : this.level.verification
             );
-        },
+        }
     },
+    async mounted() {
+        this.list = await fetchList();
+        this.editors = await fetchEditors();
     async mounted() {
         // Hide loading spinner
         this.list = await fetchList();
