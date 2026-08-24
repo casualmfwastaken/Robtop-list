@@ -132,7 +132,9 @@ export default {
         editors: [],
         loading: true,
         selected: 0,
-            const level = (typeof this !== 'undefined' && this.list && this.list[0]) ? this.list[0] : null;
+           level() {
+  return (this.list && this.list[0]) ? this.list[0] : null;
+},
 
                     : this.level.verification
             );
