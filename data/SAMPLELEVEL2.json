@@ -7,8 +7,8 @@
     "verification": "",
     "percentToQualify": "50",
     "password": "Free To Copy",
-    "records": {
-            "user": "Null",
+    "records": [
+          {  "user": "Null",
             "link": "",
             "percent": 100,
             "hz": 0
