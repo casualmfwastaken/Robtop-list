@@ -136,13 +136,13 @@ export default {
         roleIconMap,
         store
     }),
-        computed: {
+    computed: {
         level() {
-            return this.list?.[0] || null;
+            return this.list[this.selected][0];
         },
         video() {
-            if (!this.level || !this.level.showcase) {
-                return this.level ? embed(this.level.verification) : null;
+            if (!this.level.showcase) {
+                return embed(this.level.verification);
             }
 
             return embed(
@@ -150,11 +150,8 @@ export default {
                     ? this.level.showcase
                     : this.level.verification
             );
-        }
+        },
     },
-    async mounted() {
-        this.list = await fetchList();
-        this.editors = await fetchEditors();
     async mounted() {
         // Hide loading spinner
         this.list = await fetchList();
