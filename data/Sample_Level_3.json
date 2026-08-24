@@ -14,8 +14,8 @@
         {
             "user": "?",
             "link": "?",
-            "percent": ?,
-            "hz": ?
+            "percent":"?",
+            "hz": "?"
         }
     ]
 }
