@@ -127,20 +127,23 @@ export default {
             </div>
         </main>
     `,
-       data: () => ({
+    data: () => ({
         list: [],
         editors: [],
         loading: true,
         selected: 0,
+        errors: [],
+        roleIconMap,
+        store
     }),
     computed: {
         level() {
-            return (this.list && this.list[0]) ? this.list[0] : null;
+            return this.list[this.selected][0];
         },
-        verificationEmbed() {
-            return (this.level && this.level.verification) ? embed(this.level.verification) : null;
-        },
-    },
+        video() {
+            if (!this.level.showcase) {
+                return embed(this.level.verification);
+            }
 
             return embed(
                 this.toggledShowcase
