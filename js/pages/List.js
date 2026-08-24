@@ -137,8 +137,9 @@ export default {
         store
     }),
         computed: {
-        level() {
-            return this.list?. || null;
+            level() {
+            return this.list?.[0] || null;
+        },
         },
         video() {
             if (!this.level || !this.level.showcase) {
