@@ -31,7 +31,14 @@ export async function fetchList() {
             }),
         );
     } catch {
-        console.error(`Failed to load list.`);
+        function fetchList() {
+  return fetch('/api/list')
+    .then(res => res.json())
+    .catch(err => {
+      console.error("Failed to load list.", err);
+      return []; 
+    });
+}
         return null;
     }
 }
