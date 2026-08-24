@@ -2,20 +2,20 @@
     "id": 112390300,
     "name": "blade of electroman",
     "author": "titan2585",
-    "creators": ["Solo_Creator"],
-    "verifier": "Solo_Creator",
-    "verification": "https://youtu.be/nC3wg3_-c0A?si=1aDO3A_VSBgZFkP7",
-    "percentToQualify": "100",
+    "creators": ["titan2585"],
+    "verifier": "Null",
+    "verification": "",
+    "percentToQualify": "50",
     "password": "freee copy",
     "records": [
         {
-            "user": "no victors yet",
+            "user": "Null",
         },
         {
-            "user": "?",
-            "link": "?",
-            "percent":"?",
-            "hz": "?"
+            "user": "",
+            "link": "",
+            "percent":"100",
+            "hz": "0"
         }
     ]
 }
