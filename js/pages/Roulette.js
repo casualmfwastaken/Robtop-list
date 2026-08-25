@@ -151,6 +151,18 @@ export default {
         shuffle,
         getThumbnailFromId,
         getYoutubeIdFromUrl,
+        onImport() {},
+        onExport() {},
+        onImportUpload() {},
+        onDone() {},
+        onGiveUp() {},
+        save() {},
+        showToast(msg) {
+            this.toasts.push(msg);
+            setTimeout(() => {
+                this.toasts.shift();
+            }, 3000);
+        },
         async onStart() {
             if (this.isActive) {
                 this.showToast('Give up before starting a new roulette.');
