@@ -151,7 +151,7 @@ export default {
         if (!this.level.showcase) {
             return embed(this.level.verification);
         }
-
+async mounted() {  
         return embed(
             this.toggledShowcase
                 ? this.level.showcase
