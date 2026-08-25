@@ -22,7 +22,7 @@ export default {
         </main>
         <main v-else class="page-list">
             <div class="list-container">
-                <table class="list" v-if="list">
+                <table class="list" v-if="list && list.length > 0">
                     <tr v-for="([level, err], i) in list">
                         <td class="rank">
                             <p v-if="i + 1 <= 150" class="type-label-lg">#{{ i + 1 }}</p>
@@ -88,7 +88,7 @@ export default {
                     <div class="og">
                         <p class="type-label-md">Website layout made by <a href="https://tsl.pages.dev/" target="_blank">TheShittyList</a></p>
                     </div>
-                    <template v-if="editors">
+                    <template v-if="editors && editors.length > 0">
                         <h3>List Editors</h3>
                         <ol class="editors">
                             <li v-for="editor in editors">
@@ -99,30 +99,14 @@ export default {
                         </ol>
                     </template>
                     <h3>Submission Requirements</h3>
-                    <p>
-                        Achieved the record without using hacks (however, FPS bypass is allowed, up to 360fps)
-                    </p>
-                    <p>
-                        Achieved the record on the level that is listed on the site - please check the level ID before you submit a record
-                    </p>
-                    <p>
-                        Have either source audio or clicks/taps in the video. Edited audio only does not count
-                    </p>
-                    <p>
-                        The recording must have a previous attempt and entire death animation shown before the completion, unless the completion is on the first attempt. Everyplay records are exempt from this
-                    </p>
-                    <p>
-                        The recording must also show the player hit the endwall, or the completion will be invalidated.
-                    </p>
-                    <p>
-                        Do not use secret routes or bug routes
-                    </p>
-                    <p>
-                        Do not use easy modes, only a record of the unmodified level qualifies
-                    </p>
-                    <p>
-                        Once a level falls onto the Legacy List, we accept records for it for 24 hours after it falls off, then afterwards we never accept records for said level
-                    </p>
+                    <p>Achieved the record without using hacks (however, FPS bypass is allowed, up to 360fps)</p>
+                    <p>Achieved the record on the level that is listed on the site - please check the level ID before you submit a record</p>
+                    <p>Have either source audio or clicks/taps in the video. Edited audio only does not count</p>
+                    <p>The recording must have a previous attempt and entire death animation shown before the completion, unless the completion is on the first attempt. Everyplay records are exempt from this</p>
+                    <p>The recording must also show the player hit the endwall, or the completion will be invalidated.</p>
+                    <p>Do not use secret routes or bug routes</p>
+                    <p>Do not use easy modes, only a record of the unmodified level qualifies</p>
+                    <p>Once a level falls onto the Legacy List, we accept records for it for 24 hours after it falls off, then afterwards we never accept records for said level</p>
                 </div>
             </div>
         </main>
@@ -137,54 +121,54 @@ export default {
         store
     }),
     computed: {
-    level() {
-        if (!this.list || !this.list[this.selected]) {
-            return null; 
-        }
-        return this.list[this.selected][0];
-    },
-    video() {
-        if (!this.level) {
-            return '';
-        }
-
-        if (!this.level.showcase) {
-            return embed(this.level.verification);
-        }
-        return embed(
-            this.toggledShowcase
-                ? this.level.showcase
-                : this.level.verification
-        );
-    },
-},
-
-async mounted() {
-
-
-        // Hide loading spinner
-        this.list = await fetchList();
-        this.editors = await fetchEditors();
-
-        // Error handling
-        if (!this.list) {
-            this.errors = [
-                "Failed to load list. Retry in a few minutes or notify list staff.",
-            ];
-        }     else {
-            this.errors.push(
-                ...this.list
-                    .filter(([_, err]) => err)
-                    .map(([_, err]) => {
-                        return `Failed to load level. (${err}.json)`;
-                    })
-            );
-            if (!this.editors) {
-                this.errors.push("Failed to load list editors.");
+        level() {
+            if (!this.list || !Array.isArray(this.list) || !this.list[this.selected]) {
+                return null; 
             }
-        }
+            return this.list[this.selected][0];
+        },
+        video() {
+            if (!this.level) {
+                return '';
+            }
+            if (!this.level.showcase) {
+                return embed(this.level.verification);
+            }
+            return embed(
+                this.toggledShowcase
+                    ? this.level.showcase
+                    : this.level.verification
+                );
+        },
+    },
+    async mounted() {
+        try {
+            const fetchedList = await fetchList();
+            const fetchedEditors = await fetchEditors();
 
-        this.loading = false;
+            if (!fetchedList || !Array.isArray(fetchedList)) {
+                this.list = [];
+                this.errors.push("Failed to load list. Retry in a few minutes or notify list staff.");
+            } else {
+                this.list = fetchedList;
+                this.errors.push(
+                    ...this.list
+                        .filter((item) => item && item[1])
+                        .map(([_, err]) => `Failed to load level. (${err}.json)`)
+                );
+            }
+
+            if (!fetchedEditors || !Array.isArray(fetchedEditors)) {
+                this.editors = [];
+                this.errors.push("Failed to load list editors.");
+            } else {
+                this.editors = fetchedEditors;
+            }
+        } catch (e) {
+            this.errors.push("An unexpected network error occurred while loading dependencies.");
+        } finally {
+            this.loading = false;
+        }
     },
     methods: {
         embed,
