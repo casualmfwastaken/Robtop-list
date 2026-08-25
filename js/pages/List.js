@@ -137,22 +137,29 @@ export default {
         store
     }),
     computed: {
-        level() {
-            return this.list[this.selected][0];
-        },
-        video() {
-            if (!this.level.showcase) {
-                return embed(this.level.verification);
-            }
-
-            return embed(
-                this.toggledShowcase
-                    ? this.level.showcase
-                    : this.level.verification
-            );
-        },
+    level() {
+        if (!this.list || !this.list[this.selected]) {
+            return null; 
+        }
+        return this.list[this.selected][0];
     },
-    async mounted() {
+    video() {
+        if (!this.level) {
+            return '';
+        }
+
+        if (!this.level.showcase) {
+            return embed(this.level.verification);
+        }
+
+        return embed(
+            this.toggledShowcase
+                ? this.level.showcase
+                : this.level.verification
+        );
+    },
+},
+
         // Hide loading spinner
         this.list = await fetchList();
         this.editors = await fetchEditors();
