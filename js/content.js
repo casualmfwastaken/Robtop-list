@@ -1,18 +1,22 @@
 import { round, score } from './score.js';
 
-/**
- * Path to directory containing `_list.json` and all levels
- */
 const dir = '/data';
 
 export async function fetchList() {
-    const listResult = await fetch(`${dir}/_list.json`);
     try {
+        const listResult = await fetch(`${dir}/_list.json`);
+        if (!listResult.ok) {
+            throw new Error();
+        }
+        
         const list = await listResult.json();
         return await Promise.all(
             list.map(async (path, rank) => {
-                const levelResult = await fetch(`${dir}/${path}.json`);
                 try {
+                    const levelResult = await fetch(`${dir}/${path}.json`);
+                    if (!levelResult.ok) {
+                        throw new Error();
+                    }
                     const level = await levelResult.json();
                     return [
                         {
@@ -25,13 +29,11 @@ export async function fetchList() {
                         null,
                     ];
                 } catch {
-                    console.error(`Failed to load level #${rank + 1} ${path}.`);
                     return [null, path];
                 }
             }),
         );
     } catch {
-        console.error(`Failed to load list.`);
         return null;
     }
 }
@@ -49,6 +51,10 @@ export async function fetchEditors() {
 export async function fetchLeaderboard() {
     const list = await fetchList();
 
+    if (!list) {
+        return [[], []];
+    }
+
     const scoreMap = {};
     const errs = [];
     list.forEach(([level, err], rank) => {
@@ -57,7 +63,6 @@ export async function fetchLeaderboard() {
             return;
         }
 
-        // Verification
         const verifier = Object.keys(scoreMap).find(
             (u) => u.toLowerCase() === level.verifier.toLowerCase(),
         ) || level.verifier;
@@ -74,7 +79,6 @@ export async function fetchLeaderboard() {
             link: level.verification,
         });
 
-        // Records
         level.records.forEach((record) => {
             const user = Object.keys(scoreMap).find(
                 (u) => u.toLowerCase() === record.user.toLowerCase(),
@@ -105,7 +109,6 @@ export async function fetchLeaderboard() {
         });
     });
 
-    // Wrap in extra Object containing the user and total score
     const res = Object.entries(scoreMap).map(([user, scores]) => {
         const { verified, completed, progressed } = scores;
         const total = [verified, completed, progressed]
@@ -119,6 +122,5 @@ export async function fetchLeaderboard() {
         };
     });
 
-    // Sort by total score
     return [res.sort((a, b) => b.total - a.total), errs];
 }
