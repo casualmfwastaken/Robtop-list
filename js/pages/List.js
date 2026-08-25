@@ -151,7 +151,6 @@ export default {
         if (!this.level.showcase) {
             return embed(this.level.verification);
         }
-async mounted() {  
         return embed(
             this.toggledShowcase
                 ? this.level.showcase
@@ -159,6 +158,9 @@ async mounted() {
         );
     },
 },
+
+async mounted() {
+
 
         // Hide loading spinner
         this.list = await fetchList();
@@ -169,7 +171,7 @@ async mounted() {
             this.errors = [
                 "Failed to load list. Retry in a few minutes or notify list staff.",
             ];
-        } else {
+        }     else {
             this.errors.push(
                 ...this.list
                     .filter(([_, err]) => err)
