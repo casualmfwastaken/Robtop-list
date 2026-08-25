@@ -117,6 +117,7 @@ export default {
         loading: true,
         selected: 0,
         errors: [],
+        toggledShowcase: false,
         roleIconMap,
         store
     }),
@@ -125,7 +126,7 @@ export default {
             if (!this.list || !Array.isArray(this.list) || !this.list[this.selected]) {
                 return null; 
             }
-            return this.list[this.selected][0];
+            return this.list[this.selected][0] || null;
         },
         video() {
             if (!this.level) {
@@ -138,7 +139,7 @@ export default {
                 this.toggledShowcase
                     ? this.level.showcase
                     : this.level.verification
-                );
+            );
         },
     },
     async mounted() {
@@ -153,7 +154,7 @@ export default {
                 this.list = fetchedList;
                 this.errors.push(
                     ...this.list
-                        .filter((item) => item && item[1])
+                        .filter((item) => Array.isArray(item) && item[1])
                         .map(([_, err]) => `Failed to load level. (${err}.json)`)
                 );
             }
@@ -165,7 +166,7 @@ export default {
                 this.editors = fetchedEditors;
             }
         } catch (e) {
-            this.errors.push("An unexpected network error occurred while loading dependencies.");
+            this.errors.push("An unexpected error occurred while processing list arrays.");
         } finally {
             this.loading = false;
         }
