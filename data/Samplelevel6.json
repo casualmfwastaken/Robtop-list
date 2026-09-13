@@ -1,1 +1,18 @@
-
+{
+    "id": 141148467,
+    "name": "Robtoplust",
+    "author": "ChonxamGD",
+    "creators": ["ChonxamGD"],
+    "verifier": "Null",
+    "verification": "https://youtu.be/s5pZNbXxafQ?si=lRILvtAlfrupfPIn",
+    "percentToQualify": "40",
+    "password": "Free To Copy",
+    "records": [
+        {
+            "user": "Null",
+            "link": "",
+            "percent": 100,
+            "hz": 0
+        }
+    ]
+}
