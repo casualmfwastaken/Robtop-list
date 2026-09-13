@@ -1,1 +1,18 @@
-
+{
+    "id": 145446354,
+    "name": "Tidal Stereo",
+    "author": "ChonxamGD",
+    "creators": ["ChonxamGD"],
+    "verifier": "Null",
+    "verification": "https://youtu.be/rvkg8H2PVLI?si=JCdq_fgi1njghL8l",
+    "percentToQualify": "75",
+    "password": "Free To Copy",
+    "records": [
+        {
+            "user": "Null",
+            "link": "",
+            "percent": 100,
+            "hz": 0
+        }
+    ]
+}
