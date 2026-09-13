@@ -1,1 +1,18 @@
-
+{
+    "id": 147871659,
+    "name": "Thinking Robtop II",
+    "author": "ChonxamGD",
+    "creators": ["ChonxamGD"],
+    "verifier": "Null",
+    "verification": "https://youtu.be/awR7pa7mNMk?si=gr-J32HUxoxLiKwO"
+    "percentToQualify": "80",
+    "password": "Free To Copy",
+    "records": [
+        {
+            "user": "Null",
+            "link": "",
+            "percent": 100,
+            "hz": 0
+        }
+    ]
+}
