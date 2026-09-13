@@ -4,13 +4,13 @@
     "author": "titan2585",
     "creators": ["titan2585"],
     "verifier": "Null",
-    "verification": "",
+    "verification": "https://www.youtube.com/watch?v=GtEJ3rdPP_k",
     "percentToQualify": "50",
     "password": "freee copy",
     "records": [
         {
             "user": "Null",
-            "link": "https://www.youtube.com/watch?v=GtEJ3rdPP_k",
+            "link": "",
             "percent": 100,
             "hz": 0
         }
