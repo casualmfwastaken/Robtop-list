@@ -3,16 +3,16 @@
     "name": "RobTraY",
     "author": "GDsaiory",
     "creators": ["GDsaiory"],
-    "verifier": "Null",
+    "verifier": "GDsaiory",
     "verification": "https://youtu.be/BTiwxeH1fVI?si=qsBNnHAN9dO37RFR",
     "percentToQualify": "99",
     "password": "Free To Copy",
     "records": [
         {
-            "user": "Null",
-            "link": "",
+            "user": "Casualmf",
+            "link": "https://medal.tv/games/geometry-dash/clips/nwD610VP3FHFDQTiY?invite=cr-MSxMeEosODIyOTYwMzg1",
             "percent": 100,
-            "hz": 0
+            "hz": 60
         }
     ]
 }
