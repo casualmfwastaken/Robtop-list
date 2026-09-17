@@ -3,16 +3,16 @@
     "name": "Thinking Robtop II",
     "author": "ChonxamGD",
     "creators": ["ChonxamGD"],
-    "verifier": "Null",
+    "verifier": "ChonxamGD",
     "verification": "https://youtu.be/awR7pa7mNMk?si=gr-J32HUxoxLiKwO",
     "percentToQualify": "46",
     "password": "Free To Copy",
     "records": [
         {
-            "user": "Null",
+            "user": "IhsaanGD (not recorded)",
             "link": "",
             "percent": 100,
-            "hz": 0
+            "hz": 60
         }
     ]
 }
