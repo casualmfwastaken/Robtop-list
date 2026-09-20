@@ -3,16 +3,16 @@
     "name": "Robtopen circles",
     "author": "ItsvanekGD",
     "creators": ["ItsvanekGD"],
-    "verifier": "Null",
+    "verifier": "casualmf",
     "verification": "https://youtu.be/wteMr83R8AU",
     "percentToQualify": "78",
     "password": "Free To Copy",
     "records": [
         {
-            "user": "Null",
+            "user": "ihsaangd",
             "link": "",
             "percent": 100,
-            "hz": 0
+            "hz": 60
         }
     ]
 }
