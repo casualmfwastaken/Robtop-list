@@ -3,16 +3,16 @@
     "name": "Robtopen end",
     "author": "ChonxamGD",
     "creators": ["ChonxamGD"],
-    "verifier": "casualmf",
+    "verifier": "Null",
     "verification": "https://youtu.be/l8Sae0prgUw?si=8h31BixAy7hczmBB",
     "percentToQualify": "85",
     "password": "Free To Copy",
     "records": [
         {
-            "user": "ihsaangd",
+            "user": "Null",
             "link": "",
             "percent": 100,
-            "hz": 60
+            "hz": 0
         }
     ]
 }
