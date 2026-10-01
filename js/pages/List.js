@@ -151,7 +151,9 @@ export default {
                 
                 const errorsToPush = this.list
                     .filter((item) => Array.isArray(item) && item[1])
-                    .map(([_, err]) => "Failed to load level. (" + err + ".json)");
+                    .map(([_, err]) => {
+                        return "Failed to load level. (" + err + ".json)";
+                    });
                 
                 this.errors.push(...errorsToPush);
             }
