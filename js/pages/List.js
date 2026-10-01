@@ -22,18 +22,41 @@ export default {
         </main>
         <main v-else class="page-list">
             <div class="list-container">
+                <div class="time-machine-bar">
+                    <label class="type-label-lg" for="list-date">🕒 Time Machine:</label>
+                    <input 
+                        type="date" 
+                        id="list-date" 
+                        v-model="selectedDate" 
+                        @change="loadListByDate"
+                        :min="minDate"
+                        :max="todayDate"
+                    >
+                    <button v-if="isHistorical" @click="resetTimeMachine" class="reset-tm-btn">Present Day</button>
+                </div>
+
                 <table class="list" v-if="list && list.length > 0">
-                    <tr v-for="([level, err], i) in list">
-                        <td class="rank">
-                            <p v-if="i + 1 <= 150" class="type-label-lg">#{{ i + 1 }}</p>
-                            <p v-else class="type-label-lg">Legacy</p>
-                        </td>
-                        <td class="level" :class="{ 'active': selected == i, 'error': !level }">
-                            <button @click="selected = i">
-                                <span class="type-label-lg">{{ level?.name || \`Error (\${err}.json)\` }}</span>
-                            </button>
-                        </td>
-                    </tr>
+                    <template v-for="([level, err], i) in list">
+                        <tr v-if="i === 9" class="list-divider-row">
+                            <td colspan="2" class="list-divider-text">----- Extended List -----</td>
+                        </tr>
+                        
+                        <tr v-if="i === 20" class="list-divider-row">
+                            <td colspan="2" class="list-divider-text">----- Legacy List -----</td>
+                        </tr>
+
+                        <tr>
+                            <td class="rank">
+                                <p v-if="i + 1 <= 150" class="type-label-lg">#{{ i + 1 }}</p>
+                                <p v-else class="type-label-lg">Legacy</p>
+                            </td>
+                            <td class="level" :class="{ 'active': selected == i, 'error': !level }">
+                                <button @click="selected = i">
+                                    <span class="type-label-lg">{{ level?.name || \`Error (\${err}.json)\` }}</span>
+                                </button>
+                            </td>
+                        </tr>
+                    </template>
                 </table>
             </div>
             <div class="level-container">
@@ -57,7 +80,7 @@ export default {
                     </ul>
                     <h2>Records</h2>
                     <p v-if="selected + 1 <= 75"><strong>{{ level.percentToQualify }}%</strong> or better to qualify</p>
-                    <p v-else-if="selected +1 <= 150"><strong>100%</strong> or better to qualify</p>
+                    <p v-else-if="selected + 1 <= 150"><strong>100%</strong> or better to qualify</p>
                     <p v-else>This level does not accept new records.</p>
                     <table class="records">
                         <tr v-for="record in level.records" class="record">
@@ -109,16 +132,23 @@ export default {
             </div>
         </main>
     `,
-    data: () => ({
-        list: [],
-        editors: [],
-        loading: true,
-        selected: 0,
-        errors: [],
-        toggledShowcase: false,
-        roleIconMap,
-        store
-    }),
+    data() {
+        const today = new Date().toISOString().split('T')[0];
+        return {
+            list: [],
+            editors: [],
+            loading: true,
+            selected: 0,
+            errors: [],
+            toggledShowcase: false,
+            roleIconMap,
+            store,
+            selectedDate: today,
+            todayDate: today,
+            minDate: "2026-08-24",
+            isHistorical: false
+        };
+    },
     computed: {
         level() {
             if (!this.list || !Array.isArray(this.list) || !this.list[this.selected]) {
@@ -133,44 +163,77 @@ export default {
             if (!this.level.showcase) {
                 return embed(this.level.verification);
             }
-            return embed(
-                this.toggledShowcase
-                    ? this.level.showcase
-                    : this.level.verification
-            );
+            return embed(this.toggledShowcase ? this.level.showcase : this.level.verification);
         },
     },
     async mounted() {
-        try {
-            const fetchedList = await fetchList();
-            const fetchedEditors = await fetchEditors();
-
-            if (!fetchedList || !Array.isArray(fetchedList)) {
-                this.list = [];
-                this.errors.push("Failed to load list. Retry in a few minutes or notify list staff.");
-            } else {
-                this.list = fetchedList;
-                this.errors.push(
-                    ...this.list
-                        .filter((item) => Array.isArray(item) && item[1])
-                        .map(([_, err]) => `Failed to load level. (${err}.json)`)
-                );
-            }
-
-            if (!fetchedEditors || !Array.isArray(fetchedEditors)) {
-                this.editors = [];
-                this.errors.push("Failed to load list editors.");
-            } else {
-                this.editors = fetchedEditors;
-            }
-        } catch (e) {
-            this.errors.push("An unexpected network error occurred while loading dependencies.");
-        } finally {
-            this.loading = false;
-        }
+        await this.loadPresentDayData();
     },
     methods: {
         embed,
         score,
+        async loadPresentDayData() {
+            this.loading = true;
+            this.errors = [];
+            try {
+                const fetchedList = await fetchList();
+                const fetchedEditors = await fetchEditors();
+
+                if (!fetchedList || !Array.isArray(fetchedList)) {
+                    this.list = [];
+                    this.errors.push("Failed to load list. Retry in a few minutes or notify list staff.");
+                } else {
+                    this.list = fetchedList;
+                    this.errors.push(
+                        ...this.list
+                            .filter((item) => Array.isArray(item) && item[1])
+                            .map(([_, err]) => `Failed to load level. (${err}.json)`)
+                    );
+                }
+
+                if (!fetchedEditors || !Array.isArray(fetchedEditors)) {
+                    this.editors = [];
+                    this.errors.push("Failed to load list editors.");
+                } else {
+                    this.editors = fetchedEditors;
+                }
+            } catch (e) {
+                this.errors.push("An unexpected network error occurred while loading dependencies.");
+            } finally {
+                this.loading = false;
+            }
+        },
+        async loadListByDate() {
+            if (this.selectedDate === this.todayDate) {
+                this.resetTimeMachine();
+                return;
+            }
+            
+            this.loading = true;
+            this.errors = [];
+            this.isHistorical = true;
+
+            try {
+                const response = await fetch(`/data/${this.selectedDate}/list.json`);
+                if (!response.ok) {
+                    throw new Error("No record for this date");
+                }
+                const historicalList = await response.json();
+                this.list = historicalList;
+                this.selected = 0;
+            } catch (e) {
+                this.errors.push(`No archived level snapshot found for date: ${this.selectedDate}`);
+                this.isHistorical = false;
+                this.selectedDate = this.todayDate;
+                await this.loadPresentDayData();
+            } finally {
+                this.loading = false;
+            }
+        },
+        async resetTimeMachine() {
+            this.isHistorical = false;
+            this.selectedDate = this.todayDate;
+            await this.loadPresentDayData();
+        }
     },
 };
