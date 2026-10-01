@@ -22,7 +22,7 @@ export default {
         </main>
         <main v-else class="page-list">
             <div class="list-container">
-                <table class="list" v-if="list && list.length > 0">
+                <table class="list" v-if="list">
                     <tr v-for="([level, err], i) in list">
                         <td class="rank">
                             <p v-if="i + 1 <= 150" class="type-label-lg">#{{ i + 1 }}</p>
@@ -57,7 +57,7 @@ export default {
                     </ul>
                     <h2>Records</h2>
                     <p v-if="selected + 1 <= 75"><strong>{{ level.percentToQualify }}%</strong> or better to qualify</p>
-                    <p v-else-if="selected + 1 <= 150"><strong>100%</strong> or better to qualify</p>
+                    <p v-else-if="selected +1 <= 150"><strong>100%</strong> or better to qualify</p>
                     <p v-else>This level does not accept new records.</p>
                     <table class="records">
                         <tr v-for="record in level.records" class="record">
@@ -85,8 +85,10 @@ export default {
                     <div class="errors" v-show="errors.length > 0">
                         <p class="error" v-for="error of errors">{{ error }}</p>
                     </div>
-                    
-                    <template v-if="editors && editors.length > 0">
+                    <div class="og">
+                        <p class="type-label-md">Website layout made by <a href="https://tsl.pages.dev/" target="_blank">TheShittyList</a></p>
+                    </div>
+                    <template v-if="editors">
                         <h3>List Editors</h3>
                         <ol class="editors">
                             <li v-for="editor in editors">
@@ -97,78 +99,83 @@ export default {
                         </ol>
                     </template>
                     <h3>Submission Requirements</h3>
-                    <p>Achieved the record without using hacks (such as Speedhacking, Macroing, etc.)</p>
-                    <p>Achieved the record on the level that is listed on the site.</p>
-                    <p>Have click sounds in the completion video, clickbots are only allowed for Extended List levels. Otherwise just show taps.</p>
-                    <p>The completion must show the death animation</p>
-                    <p>The recording must also show the player hit the endwall, or the completion will be invalidated.</p>
-                    <p>Do not use secret ways</p>
-                    <p>Do not use easy, hold, noclip and/or auto versions of levels listed. We will reject them. </p>
-                    <p>Once a level falls onto the Legacy List, you have 24 hours to beat it, then we will NEVER accept records for that level again.</p>
+                    <p>
+                        Achieved the record without using hacks (such as Speedhacking, Macroing, etc.)
+                    </p>
+                    <p>
+                        Achieved the record on the level that is listed on the site.
+                    </p>
+                    <p>
+                        Have click sounds in the completion video, clickbots are only allowed for Extended List levels. Otherwise just show taps.
+                    </p>
+                    <p>
+                        The completion must show the death animation
+                    </p>
+                    <p>
+                        The recording must also show the player hit the endwall, or the completion will be invalidated.
+                    </p>
+                    <p>
+                        Do not use secret ways
+                    </p>
+                    <p>
+                        Do not use easy, hold, noclip and/or auto versions of levels listed. We will reject them. LDM/ULDM versions are fine though.
+                    </p>
+                    <p>
+                        Once a level falls onto the Legacy List, you have 24 hours to beat it, then we will NEVER accept records for that level again.
+                    </p>
                 </div>
             </div>
         </main>
-    \`,
+    `,
     data: () => ({
         list: [],
         editors: [],
         loading: true,
         selected: 0,
         errors: [],
-        toggledShowcase: false,
         roleIconMap,
         store
     }),
     computed: {
         level() {
-            if (!this.list || !Array.isArray(this.list) || !this.list[this.selected]) {
-                return null;
-            }
-            return this.list[this.selected][0] || null;
+            return this.list[this.selected][0];
         },
         video() {
-            if (!this.level) {
-                return '';
-            }
             if (!this.level.showcase) {
                 return embed(this.level.verification);
             }
+
             return embed(
-                this.toggledShowcase ? this.level.showcase : this.level.verification
+                this.toggledShowcase
+                    ? this.level.showcase
+                    : this.level.verification
             );
         },
     },
     async mounted() {
-        try {
-            const fetchedList = await fetchList();
-            const fetchedEditors = await fetchEditors();
+        // Hide loading spinner
+        this.list = await fetchList();
+        this.editors = await fetchEditors();
 
-            if (!fetchedList || !Array.isArray(fetchedList)) {
-                this.list = [];
-                this.errors.push("Failed to load list. Retry in a few minutes or notify list staff.");
-            } else {
-                this.list = fetchedList;
-                
-                const errorsToPush = this.list
-                    .filter((item) => Array.isArray(item) && item[1])
+        // Error handling
+        if (!this.list) {
+            this.errors = [
+                "Failed to load list. Retry in a few minutes or notify list staff.",
+            ];
+        } else {
+            this.errors.push(
+                ...this.list
+                    .filter(([_, err]) => err)
                     .map(([_, err]) => {
-                        return "Failed to load level. (" + err + ".json)";
-                    });
-                
-                this.errors.push(...errorsToPush);
-            }
-
-            if (!fetchedEditors || !Array.isArray(fetchedEditors)) {
-                this.editors = [];
+                        return `Failed to load level. (${err}.json)`;
+                    })
+            );
+            if (!this.editors) {
                 this.errors.push("Failed to load list editors.");
-            } else {
-                this.editors = fetchedEditors;
             }
-        } catch (e) {
-            this.errors.push("An unexpected network error occurred while loading dependencies.");
-        } finally {
-            this.loading = false;
         }
+
+        this.loading = false;
     },
     methods: {
         embed,
