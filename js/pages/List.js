@@ -148,11 +148,12 @@ export default {
                 this.errors.push("Failed to load list. Retry in a few minutes or notify list staff.");
             } else {
                 this.list = fetchedList;
-                this.errors.push(
-                    ...this.list
-                        .filter((item) => Array.isArray(item) && item[1])
-                        .map(([_, err]) => `Failed to load level. (${err}.json)`)
-                );
+                
+                const errorsToPush = this.list
+                    .filter((item) => Array.isArray(item) && item[1])
+                    .map(([_, err]) => "Failed to load level. (" + err + ".json)");
+                
+                this.errors.push(...errorsToPush);
             }
 
             if (!fetchedEditors || !Array.isArray(fetchedEditors)) {
