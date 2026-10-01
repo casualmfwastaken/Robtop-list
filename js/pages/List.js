@@ -131,9 +131,9 @@ export default {
                 return '';
             }
             if (!this.level.showcase) {
-                return embed(this.level.verification);
+                return this.embed(this.level.verification);
             }
-            return embed(
+            return this.embed(
                 this.toggledShowcase ? this.level.showcase : this.level.verification
             );
         },
