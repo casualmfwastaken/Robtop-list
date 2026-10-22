@@ -56,7 +56,7 @@ export default {
             <div class="level-container">
                 <div class="level" v-if="level">
                     <h1>{{ level.name }}</h1>
-                    <LevelAuthors :author="level.author" :creators="level.creators" :verifier="level.verifier"></LevelAuthors>
+                    <LevelAuthors :author="level.author || ''" :creators="level.creators || []" :verifier="level.verifier || ''"></LevelAuthors>
                     <iframe v-if="video" class="video" id="videoframe" :src="video" frameborder="0"></iframe>
                     <ul class="stats">
                         <li>
@@ -161,7 +161,9 @@ export default {
     }),
     computed: {
         level() {
-            return this.list && this.list[this.selected] ? this.list[this.selected] : null;
+            return this.list && this.list[this.selected] && this.list[this.selected][0] 
+                ? this.list[this.selected][0] 
+                : null;
         },
         video() {
             if (!this.level || (!this.level.verification && !this.level.showcase)) {
