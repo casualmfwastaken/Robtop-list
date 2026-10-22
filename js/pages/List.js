@@ -25,17 +25,17 @@ export default {
                 <table class="list" v-if="list">
                     <template v-for="([level, err], i) in list">
                         <tr v-if="i === 0">
-                            <td colspan="2" style="text-align: center; padding: 20px 0 10px 0; font-family: system-ui, -apple-system, sans-serif; font-weight: 500; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px; color: var(--color-on-background); opacity: 0.35;">
+                            <td colspan="2" style="text-align: center; padding: 20px 0 10px 0; font-family: system-ui, -apple-system, sans-serif; font-weight: 500; font-size: 0.75rem; text-transform: uppercase; letter-spacing: normal; color: #000000; opacity: 1;">
                                 <span>Main List</span>
                             </td>
                         </tr>
                         <tr v-if="i === 10">
-                            <td colspan="2" style="text-align: center; padding: 30px 0 10px 0; font-family: system-ui, -apple-system, sans-serif; font-weight: 500; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px; color: var(--color-on-background); opacity: 0.35;">
+                            <td colspan="2" style="text-align: center; padding: 30px 0 10px 0; font-family: system-ui, -apple-system, sans-serif; font-weight: 500; font-size: 0.75rem; text-transform: uppercase; letter-spacing: normal; color: #000000; opacity: 1;">
                                 <span>Extended List</span>
                             </td>
                         </tr>
                         <tr v-if="i === 20">
-                            <td colspan="2" style="text-align: center; padding: 30px 0 10px 0; font-family: system-ui, -apple-system, sans-serif; font-weight: 500; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px; color: var(--color-on-background); opacity: 0.35;">
+                            <td colspan="2" style="text-align: center; padding: 30px 0 10px 0; font-family: system-ui, -apple-system, sans-serif; font-weight: 500; font-size: 0.75rem; text-transform: uppercase; letter-spacing: normal; color: #000000; opacity: 1;">
                                 <span>Legacy List</span>
                             </td>
                         </tr>
