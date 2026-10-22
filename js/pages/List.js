@@ -36,17 +36,17 @@ export default {
                 <table class="list" v-if="currentTab === 'ranked'">
                     <template v-for="(level, i) in rankedList">
                         <tr v-if="i === 0">
-                            <td colspan="2" style="text-align: center; padding: 20px 0 10px 0; color: #000000; opacity: 1;">
+                            <td colspan="2" style="text-align: center; padding: 20px 0 10px 0; color: var(--color-on-background); opacity: 1;">
                                 <span class="type-label-lg" style="font-weight: 500;">Main List</span>
                             </td>
                         </tr>
                         <tr v-if="i === 10">
-                            <td colspan="2" style="text-align: center; padding: 30px 0 10px 0; color: #000000; opacity: 1;">
+                            <td colspan="2" style="text-align: center; padding: 30px 0 10px 0; color: var(--color-on-background); opacity: 1;">
                                 <span class="type-label-lg" style="font-weight: 500;">Extended List</span>
                             </td>
                         </tr>
                         <tr v-if="i === 20">
-                            <td colspan="2" style="text-align: center; padding: 30px 0 10px 0; color: #000000; opacity: 1;">
+                            <td colspan="2" style="text-align: center; padding: 30px 0 10px 0; color: var(--color-on-background); opacity: 1;">
                                 <span class="type-label-lg" style="font-weight: 500;">Legacy List</span>
                             </td>
                         </tr>
