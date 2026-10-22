@@ -25,18 +25,18 @@ export default {
                 <table class="list" v-if="list">
                     <template v-for="([level, err], i) in list">
                         <tr v-if="i === 0">
-                            <td colspan="2" style="text-align: center; padding: 10px 0; font-weight: bold; opacity: 0.7;">
-                                <span>--- Main List ---</span>
+                            <td colspan="2" style="text-align: center; padding: 25px 0 15px 0; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; font-size: 0.85rem; color: var(--color-on-background); opacity: 0.4;">
+                                <span>— Main List —</span>
                             </td>
                         </tr>
                         <tr v-if="i === 10">
-                            <td colspan="2" style="text-align: center; padding: 10px 0; font-weight: bold; opacity: 0.7;">
-                                <span>--- Extended List ---</span>
+                            <td colspan="2" style="text-align: center; padding: 35px 0 15px 0; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; font-size: 0.85rem; color: var(--color-on-background); opacity: 0.4;">
+                                <span>— Extended List —</span>
                             </td>
                         </tr>
                         <tr v-if="i === 20">
-                            <td colspan="2" style="text-align: center; padding: 10px 0; font-weight: bold; opacity: 0.7;">
-                                <span>--- Legacy List ---</span>
+                            <td colspan="2" style="text-align: center; padding: 35px 0 15px 0; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; font-size: 0.85rem; color: var(--color-on-background); opacity: 0.4;">
+                                <span>— Legacy List —</span>
                             </td>
                         </tr>
                         <tr>
