@@ -22,8 +22,19 @@ export default {
         </main>
         <main v-else class="page-list">
             <div class="list-container">
-                <table class="list" v-if="list">
-                    <template v-for="([level, err], i) in list">
+                <div class="list-tabs" style="display: flex; width: 100%; background: var(--color-background-hover); border-radius: 4px; padding: 4px; margin-bottom: 15px; box-sizing: border-box;">
+                    <button @click="currentTab = 'ranked'; selectedIndex = 0;" 
+                            :style="{ flex: 1, padding: '8px', border: 'none', background: currentTab === 'ranked' ? 'var(--color-primary)' : 'transparent', color: currentTab === 'ranked' ? 'var(--color-on-primary)' : 'var(--color-on-background)', cursor: 'pointer', borderRadius: '4px', fontWeight: '600' }">
+                        <span class="type-label-lg">Ranked</span>
+                    </button>
+                    <button @click="currentTab = 'unverified'; selectedIndex = 0;" 
+                            :style="{ flex: 1, padding: '8px', border: 'none', background: currentTab === 'unverified' ? 'var(--color-primary)' : 'transparent', color: currentTab === 'unverified' ? 'var(--color-on-primary)' : 'var(--color-on-background)', cursor: 'pointer', borderRadius: '4px', fontWeight: '600' }">
+                        <span class="type-label-lg">Unverified</span>
+                    </button>
+                </div>
+
+                <table class="list" v-if="currentTab === 'ranked'">
+                    <template v-for="(level, i) in rankedList">
                         <tr v-if="i === 0">
                             <td colspan="2" style="text-align: center; padding: 20px 0 10px 0; color: #000000; opacity: 1;">
                                 <span class="type-label-lg" style="font-weight: 500;">Main List</span>
@@ -44,9 +55,29 @@ export default {
                                 <p v-if="i + 1 <= 20" class="type-label-lg">#{{ i + 1 }}</p>
                                 <p v-else class="type-label-lg">Legacy</p>
                             </td>
-                            <td class="level" :class="{ 'active': selected == i, 'error': !level }">
-                                <button @click="selected = i">
-                                    <span class="type-label-lg">{{ level?.name || \`Error (\${err}.json)\` }}</span>
+                            <td class="level" :class="{ 'active': selectedIndex == i, 'error': !level }">
+                                <button @click="selectedIndex = i">
+                                    <span class="type-label-lg">{{ level?.name || 'Error Loading' }}</span>
+                                </button>
+                            </td>
+                        </tr>
+                    </template>
+                </table>
+
+                <table class="list" v-if="currentTab === 'unverified'">
+                    <tr v-if="unverifiedList.length === 0">
+                        <td style="text-align: center; padding: 20px; opacity: 0.5;">
+                            <span class="type-label-lg">No unverified levels.</span>
+                        </td>
+                    </tr>
+                    <template v-else v-for="(level, i) in unverifiedList">
+                        <tr>
+                            <td class="rank">
+                                <p class="type-label-lg">—</p>
+                            </td>
+                            <td class="level" :class="{ 'active': selectedIndex == i, 'error': !level }">
+                                <button @click="selectedIndex = i">
+                                    <span class="type-label-lg">{{ level?.name || 'Error Loading' }}</span>
                                 </button>
                             </td>
                         </tr>
@@ -61,7 +92,7 @@ export default {
                     <ul class="stats">
                         <li>
                             <div class="type-title-sm">Points when completed</div>
-                            <p>{{ score(selected + 1, 100, level.percentToQualify) }}</p>
+                            <p>{{ score(currentTab === 'ranked' ? selectedIndex + 1 : 100, 100, level.percentToQualify || 100) }}</p>
                         </li>
                         <li>
                             <div class="type-title-sm">ID</div>
@@ -73,10 +104,12 @@ export default {
                         </li>
                     </ul>
                     <h2>Records</h2>
-                    <p v-if="selected + 1 <= 10"><strong>{{ level.percentToQualify }}%</strong> or better to qualify</p>
-                    <p v-else-if="selected + 1 <= 20"><strong>100%</strong> or better to qualify</p>
+                    <p v-if="currentTab === 'unverified'">This level is currently unverified.</p>
+                    <p v-else-if="selectedIndex + 1 <= 10"><strong>{{ level.percentToQualify }}%</strong> or better to qualify</p>
+                    <p v-else-if="selectedIndex + 1 <= 20"><strong>100%</strong> or better to qualify</p>
                     <p v-else>This level does not accept new records.</p>
-                    <table class="records">
+                    
+                    <table class="records" v-if="level.records && level.records.length > 0">
                         <tr v-for="record in level.records" class="record">
                             <td class="percent">
                                 <p>{{ record.percent }}%</p>
@@ -92,11 +125,13 @@ export default {
                             </td>
                         </tr>
                     </table>
+                    <p v-else style="opacity: 0.6; padding: 10px 0;">No records established yet.</p>
                 </div>
                 <div v-else class="level" style="height: 100%; justify-content: center; align-items: center;">
                     <p>(ノಠ益ಠ)ノ彡┻━┻</p>
                 </div>
             </div>
+
             <div class="meta-container">
                 <div class="meta">
                     <div class="errors" v-show="errors.length > 0">
@@ -154,16 +189,22 @@ export default {
         list: [],
         editors: [],
         loading: true,
-        selected: 0,
+        selectedIndex: 0,
+        currentTab: 'ranked',
         errors: [],
         roleIconMap,
         store
     }),
     computed: {
+        rankedList() {
+            return this.list ? this.list.filter(([lvl]) => lvl && lvl.verifier).map(([lvl]) => lvl) : [];
+        },
+        unverifiedList() {
+            return this.list ? this.list.filter(([lvl]) => lvl && !lvl.verifier).map(([lvl]) => lvl) : [];
+        },
         level() {
-            return this.list && this.list[this.selected] && this.list[this.selected][0]
-                ? this.list[this.selected][0] 
-                : null;
+            const activeList = this.currentTab === 'ranked' ? this.rankedList : this.unverifiedList;
+            return activeList && activeList[this.selectedIndex] ? activeList[this.selectedIndex] : null;
         },
         video() {
             if (!this.level || (!this.level.verification && !this.level.showcase)) {
@@ -182,20 +223,19 @@ export default {
         },
     },
     async mounted() {
-        this.list = await fetchList();
+        const fetched = await fetchList();
         this.editors = await fetchEditors();
 
-        if (!this.list) {
+        if (!fetched) {
             this.errors = [
                 "Failed to load list. Retry in a few minutes or notify list staff.",
             ];
         } else {
+            this.list = fetched;
             this.errors.push(
                 ...this.list
                     .filter(([_, err]) => err)
-                    .map(([_, err]) => {
-                        return `Failed to load level. (${err}.json)`;
-                    })
+                    .map(([_, err]) => `Failed to load level. (${err}.json)`)
             );
             if (!this.editors) {
                 this.errors.push("Failed to load list editors.");
