@@ -22,19 +22,19 @@ export default {
         </main>
         <main v-else class="page-list">
             <div class="list-container">
-                <div class="list-tabs" style="display: flex; width: 100%; background: var(--color-background-hover); border-radius: 4px; padding: 4px; margin-bottom: 15px; box-sizing: border-box;">
-                    <button @click="currentTab = 'ranked'; selectedIndex = 0;" 
-                            :style="{ flex: 1, padding: '8px', border: 'none', background: currentTab === 'ranked' ? 'var(--color-primary)' : 'transparent', color: currentTab === 'ranked' ? 'var(--color-on-primary)' : 'var(--color-on-background)', cursor: 'pointer', borderRadius: '4px', fontWeight: '600' }">
-                        <span class="type-label-lg">Ranked</span>
+                <div class="list-tabs" style="display: flex; width: 100%; background: var(--color-background-hover); border-radius: 8px; padding: 4px; margin-bottom: 15px; box-sizing: border-box; transition: background 0.2s ease;">
+                    <button @click="currentTab = 'placed'; selectedIndex = 0;" 
+                            :style="{ flex: 1, padding: '10px', border: 'none', background: currentTab === 'placed' ? 'var(--color-primary)' : 'transparent', color: currentTab === 'placed' ? 'var(--color-on-primary)' : 'var(--color-on-background)', cursor: 'pointer', borderRadius: '6px', fontWeight: '600', transition: 'all 0.2s ease-in-out' }">
+                        <span class="type-label-lg">Placed</span>
                     </button>
                     <button @click="currentTab = 'unverified'; selectedIndex = 0;" 
-                            :style="{ flex: 1, padding: '8px', border: 'none', background: currentTab === 'unverified' ? 'var(--color-primary)' : 'transparent', color: currentTab === 'unverified' ? 'var(--color-on-primary)' : 'var(--color-on-background)', cursor: 'pointer', borderRadius: '4px', fontWeight: '600' }">
+                            :style="{ flex: 1, padding: '10px', border: 'none', background: currentTab === 'unverified' ? 'var(--color-primary)' : 'transparent', color: currentTab === 'unverified' ? 'var(--color-on-primary)' : 'var(--color-on-background)', cursor: 'pointer', borderRadius: '6px', fontWeight: '600', transition: 'all 0.2s ease-in-out' }">
                         <span class="type-label-lg">Unverified</span>
                     </button>
                 </div>
 
-                <table class="list" v-if="currentTab === 'ranked'">
-                    <template v-for="(level, i) in rankedList">
+                <table class="list" v-if="currentTab === 'placed'" style="transition: opacity 0.2s ease-in-out;">
+                    <template v-for="(level, i) in placedList">
                         <tr v-if="i === 0">
                             <td colspan="2" style="text-align: center; padding: 20px 0 10px 0; color: var(--color-on-background); opacity: 1;">
                                 <span class="type-label-lg" style="font-weight: 500;">Main List</span>
@@ -56,7 +56,7 @@ export default {
                                 <p v-else class="type-label-lg">Legacy</p>
                             </td>
                             <td class="level" :class="{ 'active': selectedIndex == i, 'error': !level }">
-                                <button @click="selectedIndex = i">
+                                <button @click="selectedIndex = i" style="transition: background-color 0.15s ease;">
                                     <span class="type-label-lg">{{ level?.name || 'Error Loading' }}</span>
                                 </button>
                             </td>
@@ -64,7 +64,7 @@ export default {
                     </template>
                 </table>
 
-                <table class="list" v-if="currentTab === 'unverified'">
+                <table class="list" v-if="currentTab === 'unverified'" style="transition: opacity 0.2s ease-in-out;">
                     <tr v-if="unverifiedList.length === 0">
                         <td style="text-align: center; padding: 20px; opacity: 0.5;">
                             <span class="type-label-lg">No unverified levels.</span>
@@ -76,7 +76,7 @@ export default {
                                 <p class="type-label-lg">—</p>
                             </td>
                             <td class="level" :class="{ 'active': selectedIndex == i, 'error': !level }">
-                                <button @click="selectedIndex = i">
+                                <button @click="selectedIndex = i" style="transition: background-color 0.15s ease;">
                                     <span class="type-label-lg">{{ level?.name || 'Error Loading' }}</span>
                                 </button>
                             </td>
@@ -84,7 +84,7 @@ export default {
                     </template>
                 </table>
             </div>
-            <div class="level-container">
+            <div class="level-container" style="transition: opacity 0.2s ease-in-out;">
                 <div class="level" v-if="level">
                     <h1>{{ level.name }}</h1>
                     <LevelAuthors :author="level.author || ''" :creators="level.creators || []" :verifier="level.verifier || ''"></LevelAuthors>
@@ -92,7 +92,7 @@ export default {
                     <ul class="stats">
                         <li>
                             <div class="type-title-sm">Points when completed</div>
-                            <p>{{ score(currentTab === 'ranked' ? selectedIndex + 1 : 100, 100, level.percentToQualify || 100) }}</p>
+                            <p>{{ score(currentTab === 'placed' ? selectedIndex + 1 : 100, 100, level.percentToQualify || 100) }}</p>
                         </li>
                         <li>
                             <div class="type-title-sm">ID</div>
@@ -190,20 +190,20 @@ export default {
         editors: [],
         loading: true,
         selectedIndex: 0,
-        currentTab: 'ranked',
+        currentTab: 'placed',
         errors: [],
         roleIconMap,
         store
     }),
     computed: {
-        rankedList() {
-            return this.list ? this.list.filter(([lvl]) => lvl && lvl.verifier).map(([lvl]) => lvl) : [];
+        placedList() {
+            return this.list ? this.list.map(([lvl]) => lvl).filter(lvl => lvl) : [];
         },
         unverifiedList() {
-            return this.list ? this.list.filter(([lvl]) => lvl && !lvl.verifier).map(([lvl]) => lvl) : [];
+            return [];
         },
         level() {
-            const activeList = this.currentTab === 'ranked' ? this.rankedList : this.unverifiedList;
+            const activeList = this.currentTab === 'placed' ? this.placedList : this.unverifiedList;
             return activeList && activeList[this.selectedIndex] ? activeList[this.selectedIndex] : null;
         },
         video() {
