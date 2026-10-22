@@ -120,6 +120,13 @@ export default {
                     <p>
                         Once a level falls onto the Legacy List, you have 24 hours to beat it, then we will NEVER accept records for that level again.
                     </p>
+                    <p>
+                        #0-10: Main list, will accept all records (list percentage and up)
+                       </p>
+                       <p>
+                          #10-20: Extended list, will accept only 100% records
+                         </p>
+                         <p> #20-30: Legacy list, will only accept records within 24 hours of falling
                 </div>
             </div>
         </main>
