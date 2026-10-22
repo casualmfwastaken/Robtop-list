@@ -23,17 +23,34 @@ export default {
         <main v-else class="page-list">
             <div class="list-container">
                 <table class="list" v-if="list">
-                    <tr v-for="([level, err], i) in list">
-                        <td class="rank">
-                            <p v-if="i + 1 <= 150" class="type-label-lg">#{{ i + 1 }}</p>
-                            <p v-else class="type-label-lg">Legacy</p>
-                        </td>
-                        <td class="level" :class="{ 'active': selected == i, 'error': !level }">
-                            <button @click="selected = i">
-                                <span class="type-label-lg">{{ level?.name || \`Error (\${err}.json)\` }}</span>
-                            </button>
-                        </td>
-                    </tr>
+                    <template v-for="([level, err], i) in list">
+                        <tr v-if="i === 0">
+                            <td colspan="2" style="text-align: center; padding: 10px 0; font-weight: bold; opacity: 0.7;">
+                                <span>--- Main List ---</span>
+                            </td>
+                        </tr>
+                        <tr v-if="i === 10">
+                            <td colspan="2" style="text-align: center; padding: 10px 0; font-weight: bold; opacity: 0.7;">
+                                <span>--- Extended List ---</span>
+                            </td>
+                        </tr>
+                        <tr v-if="i === 20">
+                            <td colspan="2" style="text-align: center; padding: 10px 0; font-weight: bold; opacity: 0.7;">
+                                <span>--- Legacy List ---</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="rank">
+                                <p v-if="i + 1 <= 20" class="type-label-lg">#{{ i + 1 }}</p>
+                                <p v-else class="type-label-lg">Legacy</p>
+                            </td>
+                            <td class="level" :class="{ 'active': selected == i, 'error': !level }">
+                                <button @click="selected = i">
+                                    <span class="type-label-lg">{{ level?.name || \`Error (\${err}.json)\` }}</span>
+                                </button>
+                            </td>
+                        </tr>
+                    </template>
                 </table>
             </div>
             <div class="level-container">
@@ -56,8 +73,8 @@ export default {
                         </li>
                     </ul>
                     <h2>Records</h2>
-                    <p v-if="selected + 1 <= 75"><strong>{{ level.percentToQualify }}%</strong> or better to qualify</p>
-                    <p v-else-if="selected +1 <= 150"><strong>100%</strong> or better to qualify</p>
+                    <p v-if="selected + 1 <= 10"><strong>{{ level.percentToQualify }}%</strong> or better to qualify</p>
+                    <p v-else-if="selected + 1 <= 20"><strong>100%</strong> or better to qualify</p>
                     <p v-else>This level does not accept new records.</p>
                     <table class="records">
                         <tr v-for="record in level.records" class="record">
@@ -122,11 +139,13 @@ export default {
                     </p>
                     <p>
                         #0-10: Main list, will accept all records (list percentage and up)
-                       </p>
-                       <p>
-                          #10-20: Extended list, will accept only 100% records
-                         </p>
-                         <p> #20-30: Legacy list, will only accept records within 24 hours of falling
+                    </p>
+                    <p>
+                        #10-20: Extended list, will accept only 100% records
+                    </p>
+                    <p>
+                        #20-30: Legacy list, will only accept records within 24 hours of falling
+                    </p>
                 </div>
             </div>
         </main>
@@ -157,11 +176,9 @@ export default {
         },
     },
     async mounted() {
-        // Hide loading spinner
         this.list = await fetchList();
         this.editors = await fetchEditors();
 
-        // Error handling
         if (!this.list) {
             this.errors = [
                 "Failed to load list. Retry in a few minutes or notify list staff.",
