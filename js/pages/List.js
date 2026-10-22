@@ -25,18 +25,18 @@ export default {
                 <table class="list" v-if="list">
                     <template v-for="([level, err], i) in list">
                         <tr v-if="i === 0">
-                            <td colspan="2" style="text-align: center; padding: 25px 0 15px 0; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; font-size: 0.85rem; color: var(--color-on-background); opacity: 0.4;">
-                                <span>— Main List —</span>
+                            <td colspan="2" style="text-align: center; padding: 20px 0 10px 0; font-family: system-ui, -apple-system, sans-serif; font-weight: 500; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px; color: var(--color-on-background); opacity: 0.35;">
+                                <span>Main List</span>
                             </td>
                         </tr>
                         <tr v-if="i === 10">
-                            <td colspan="2" style="text-align: center; padding: 35px 0 15px 0; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; font-size: 0.85rem; color: var(--color-on-background); opacity: 0.4;">
-                                <span>— Extended List —</span>
+                            <td colspan="2" style="text-align: center; padding: 30px 0 10px 0; font-family: system-ui, -apple-system, sans-serif; font-weight: 500; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px; color: var(--color-on-background); opacity: 0.35;">
+                                <span>Extended List</span>
                             </td>
                         </tr>
                         <tr v-if="i === 20">
-                            <td colspan="2" style="text-align: center; padding: 35px 0 15px 0; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; font-size: 0.85rem; color: var(--color-on-background); opacity: 0.4;">
-                                <span>— Legacy List —</span>
+                            <td colspan="2" style="text-align: center; padding: 30px 0 10px 0; font-family: system-ui, -apple-system, sans-serif; font-weight: 500; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px; color: var(--color-on-background); opacity: 0.35;">
+                                <span>Legacy List</span>
                             </td>
                         </tr>
                         <tr>
@@ -161,7 +161,7 @@ export default {
     }),
     computed: {
         level() {
-            return this.list[this.selected][0];
+            return this.list[this.selected];
         },
         video() {
             if (!this.level.showcase) {
