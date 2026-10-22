@@ -26,17 +26,17 @@ export default {
                     <template v-for="([level, err], i) in list">
                         <tr v-if="i === 0">
                             <td colspan="2" style="text-align: center; padding: 20px 0 10px 0; color: #000000; opacity: 1;">
-                                <span>Main List</span>
+                                <span class="type-label-lg" style="font-weight: 500;">Main List</span>
                             </td>
                         </tr>
                         <tr v-if="i === 10">
                             <td colspan="2" style="text-align: center; padding: 30px 0 10px 0; color: #000000; opacity: 1;">
-                                <span>Extended List</span>
+                                <span class="type-label-lg" style="font-weight: 500;">Extended List</span>
                             </td>
                         </tr>
                         <tr v-if="i === 20">
                             <td colspan="2" style="text-align: center; padding: 30px 0 10px 0; color: #000000; opacity: 1;">
-                                <span>Legacy List</span>
+                                <span class="type-label-lg" style="font-weight: 500;">Legacy List</span>
                             </td>
                         </tr>
                         <tr>
@@ -161,7 +161,7 @@ export default {
     }),
     computed: {
         level() {
-            return this.list && this.list[this.selected] && this.list[this.selected][0] 
+            return this.list && this.list[this.selected] && this.list[this.selected][0]
                 ? this.list[this.selected][0] 
                 : null;
         },
