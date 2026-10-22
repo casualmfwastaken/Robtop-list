@@ -1,0 +1,18 @@
+{
+    "id": 151029324,
+    "name": "Empty Club",
+    "author": "wLymon",
+    "creators": ["wLymon"],
+    "verifier": "s3cretw",
+    "verification": "",
+    "percentToQualify": "56",
+    "password": "Free To Copy",
+    "records": [
+        {
+            "user": "Null",
+            "link": "",
+            "percent": 100,
+            "hz": 0
+        }
+    ]
+}
